@@ -1,11 +1,15 @@
-import './App.css'
-import { DatePicker } from 'antd'
+import "./App.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Router from "./routes/Router";
 
 function App() {
+  const queryClient = new QueryClient();
 
   return (
-    <DatePicker />
-  )
+    <QueryClientProvider client={queryClient}>
+      <Router />
+    </QueryClientProvider>
+  );
 }
 
-export default App
+export default App;
