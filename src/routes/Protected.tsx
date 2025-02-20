@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type ProtectedProps = {
   isAuthenticated: boolean;
@@ -8,22 +8,23 @@ type ProtectedProps = {
   children: React.ReactNode;
 };
 
-export const Protected = ({
-  isAuthenticated,
-  isAuthorized,
-  uniqueRedirectPath,
-  children,
-}: ProtectedProps) => {
-  let redirectPath = null;
+export const Protected = ({ uniqueRedirectPath, children }: ProtectedProps) => {
+  const useAuth = () => {
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("jwt="));
+    return token !== undefined;
+  };
+
+  const history = useNavigate();
+  const isAuthenticated = useAuth();
 
   if (!isAuthenticated) {
-    redirectPath = uniqueRedirectPath ? uniqueRedirectPath : "/login";
-  } else if (!isAuthorized) {
-    redirectPath = uniqueRedirectPath ? uniqueRedirectPath : "/issue";
-  }
-
-  if ((!isAuthenticated || !isAuthorized) && redirectPath) {
-    return <Navigate to={redirectPath} replace />;
+    if (uniqueRedirectPath) {
+      history(uniqueRedirectPath);
+    } else {
+      history("/login");
+    }
   }
 
   return children;

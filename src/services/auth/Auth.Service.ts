@@ -4,7 +4,7 @@ import { api, AUTH_URL } from "../api";
 const login = async (data: LoginParamsTypes) => {
   const response = await api({
     method: "post",
-    url: AUTH_URL,
+    url: AUTH_URL + "/login",
     data,
   });
   return response;

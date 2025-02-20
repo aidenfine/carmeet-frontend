@@ -7,6 +7,10 @@ const api = axios.create({
   //@ts-ignore
   baseURL: import.meta.env.VITE_BASE_URL,
   withCredentials: true,
+  headers: {
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  },
 });
 
 export { api, AUTH_URL };

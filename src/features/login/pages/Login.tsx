@@ -1,18 +1,31 @@
 import { Button, Form, FormProps, Input, Typography } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import Password from "antd/es/input/Password";
+import { AuthService } from "../../../services/auth/Auth.Service";
 
 const { Title, Text } = Typography;
 
 export const Login = () => {
   type LoginFieldType = {
-    email?: string;
-    password?: string;
+    email: string;
+    password: string;
     remember?: string;
   };
 
-  const onFinish: FormProps<LoginFieldType>["onFinish"] = (values) => {
+  const onFinish: FormProps<LoginFieldType>["onFinish"] = async (values) => {
     console.log("Success:", values);
+    await login(values.email, values.password);
+  };
+
+  const login = async (email: string, password: string) => {
+    console.log(import.meta.env.VITE_BASE_URL);
+
+    try {
+      await AuthService.login({ email, password });
+      console.log("Login successful");
+    } catch (err) {
+      console.error("Login failed:", err);
+    }
   };
 
   const onFinishFailed: FormProps<LoginFieldType>["onFinishFailed"] = (
@@ -50,7 +63,7 @@ export const Login = () => {
         <Button
           type="primary"
           htmlType="submit"
-          loading={true}
+          // loading={true}
           block
           style={{ marginTop: 16, borderRadius: 24 }}
         >
