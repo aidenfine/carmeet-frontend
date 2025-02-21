@@ -1,7 +1,11 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+// vite.config.ts
+import { defineConfig } from 'vite';
+import path from 'path';
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  resolve: {
+    alias: {
+      'src': path.resolve(__dirname, 'src')  // This sets up 'src' as the root directory
+    }
+  }
 });

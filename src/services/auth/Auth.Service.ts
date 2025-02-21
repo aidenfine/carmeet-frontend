@@ -9,7 +9,15 @@ const login = async (data: LoginParamsTypes) => {
   });
   return response;
 };
+const verifyToken = async () => {
+  const response = await api({
+    method: "get",
+    url: AUTH_URL + "/verify",
+  });
+  return response;
+};
 
 export const AuthService = {
   login,
+  verifyToken,
 };

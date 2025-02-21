@@ -1,31 +1,34 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "src/context/Auth";
 
 type ProtectedProps = {
-  isAuthenticated: boolean;
-  isAuthorized: boolean;
+  isProtected?: boolean;
   uniqueRedirectPath?: string | null;
   children: React.ReactNode;
 };
 
-export const Protected = ({ uniqueRedirectPath, children }: ProtectedProps) => {
-  const useAuth = () => {
-    const token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("jwt="));
-    return token !== undefined;
-  };
+export const Protected = ({
+  isProtected,
+  uniqueRedirectPath,
+  children,
+}: ProtectedProps) => {
+  const navigate = useNavigate();
+  const { isAuthenticated, loading } = useAuth();
 
-  const history = useNavigate();
-  const isAuthenticated = useAuth();
-
-  if (!isAuthenticated) {
-    if (uniqueRedirectPath) {
-      history(uniqueRedirectPath);
-    } else {
-      history("/login");
+  React.useEffect(() => {
+    if (!loading && isProtected && !isAuthenticated) {
+      navigate(uniqueRedirectPath || "/login");
     }
+  }, [isProtected, isAuthenticated, loading, navigate, uniqueRedirectPath]);
+
+  if (loading) {
+    return <div>Loading...</div>;
   }
 
-  return children;
+  if (!isProtected || isAuthenticated) {
+    return <>{children}</>;
+  }
+
+  return null;
 };
