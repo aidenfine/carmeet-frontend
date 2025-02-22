@@ -1,28 +1,42 @@
-import { theme, Layout, Menu, Button, Avatar, Dropdown, MenuProps } from "antd";
+import {
+  theme,
+  Layout,
+  Menu,
+  Button,
+  Avatar,
+  Dropdown,
+  MenuProps,
+  Divider,
+} from "antd";
 import { Header, Content } from "antd/es/layout/layout";
 import Sider from "antd/es/layout/Sider";
 import { ReactNode, useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UploadOutlined,
   UserOutlined,
-  VideoCameraOutlined,
   SettingOutlined,
+  LogoutOutlined,
+  WarningOutlined,
+  QuestionOutlined,
 } from "@ant-design/icons";
+
+import placeholder from "../../assets/placeholder.svg";
+import { useNavigate } from "react-router-dom";
+import { HOST_NAV_ITEMS } from "./config/config";
 
 type MainLayoutProps = {
   children: ReactNode;
 };
 
 export const MainLayout = ({ children }: MainLayoutProps) => {
+  const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
   const handleLogout = () => {
-    // Add your logout logic here
     console.log("Logout clicked");
   };
 
@@ -32,43 +46,57 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
 
   const items: MenuProps["items"] = [
     {
-      key: "1",
-      label: "item 1",
+      key: "profile",
+      label: "Profile",
+      icon: <UserOutlined />,
     },
     {
-      key: "2",
+      key: "settings",
       label: "Settings",
       icon: <SettingOutlined />,
+      disabled: false,
+    },
+    {
+      key: "logout",
+      label: "Logout",
+      icon: <LogoutOutlined />,
       disabled: false,
     },
   ];
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className="demo-logo-vertical" />
+      <Sider trigger={null} collapsible collapsed={collapsed} theme="light">
+        <div style={{ marginTop: "12px" }} className="demo-logo-vertical">
+          <img width={"200"} src={placeholder} />
+        </div>
+        <Divider />
         <Menu
-          theme="dark"
+          theme="light"
           mode="inline"
-          defaultSelectedKeys={["1"]}
-          items={[
-            {
-              key: "1",
-              icon: <UserOutlined />,
-              label: "nav 1",
-            },
-            {
-              key: "2",
-              icon: <VideoCameraOutlined />,
-              label: "nav 2",
-            },
-            {
-              key: "3",
-              icon: <UploadOutlined />,
-              label: "nav 3",
-            },
-          ]}
+          style={{
+            marginTop: "45px",
+          }}
+          defaultSelectedKeys={["home"]}
+          items={HOST_NAV_ITEMS}
         />
+        <div
+          style={{
+            position: "absolute",
+            bottom: 0,
+            width: "100%",
+          }}
+        >
+          <Divider />
+          <Menu theme="light" mode="inline">
+            <Menu.Item key="help" icon={<WarningOutlined />}>
+              Report an issue
+            </Menu.Item>
+            <Menu.Item key="contact" icon={<QuestionOutlined />}>
+              Support
+            </Menu.Item>
+          </Menu>
+        </div>
       </Sider>
       <Layout>
         <Header
