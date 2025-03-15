@@ -1,28 +1,27 @@
 import { Button, Form, FormProps, Input, Typography, message } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import Password from "antd/es/input/Password";
-import { AuthService } from "../../../services/auth/Auth.Service";
+import { AuthService } from "src/services";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "src/context/Auth";
 
 const { Title, Text } = Typography;
 
 export const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { checkAuth } = useAuth();
 
-  type LoginFieldType = {
-    email: string;
-    password: string;
-    remember?: string;
-  };
+  type LoginFieldType = { email: string; password: string; remember?: string };
 
   const onFinish: FormProps<LoginFieldType>["onFinish"] = async (values) => {
     setIsLoading(true);
     try {
       await login(values.email, values.password);
+      await checkAuth();
+      navigate("/home", { replace: true });
       message.success("Login successful");
-      navigate("/home");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       message.error("Login failed. Please try again.");
@@ -35,8 +34,8 @@ export const Login = () => {
   const login = async (email: string, password: string) => {
     console.log(import.meta.env.VITE_BASE_URL);
     try {
-      await AuthService.login({ email, password });
-      console.log("Login successful");
+      const response = await AuthService.login({ email, password });
+      return response;
     } catch (err) {
       console.error("Login failed:", err);
       throw err;

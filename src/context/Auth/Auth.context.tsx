@@ -9,6 +9,8 @@ import { AuthService } from "src/services";
 
 interface AuthContextType {
   isAuthenticated: boolean;
+
+  logout: () => void;
   loading: boolean;
   checkAuth: () => Promise<void>;
 }
@@ -36,6 +38,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
+  const logout = async () => {
+    setIsAuthenticated(false);
+  };
+
   useEffect(() => {
     checkAuth();
   }, []);
@@ -44,6 +50,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     isAuthenticated,
     loading,
     checkAuth,
+    logout,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

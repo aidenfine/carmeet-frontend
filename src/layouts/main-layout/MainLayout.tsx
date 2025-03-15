@@ -24,6 +24,7 @@ import {
 import placeholder from "../../assets/placeholder.svg";
 import { useNavigate } from "react-router-dom";
 import { HOST_NAV_ITEMS } from "./config/config";
+import { useAuth } from "src/context/Auth";
 
 type MainLayoutProps = {
   children: ReactNode;
@@ -31,6 +32,7 @@ type MainLayoutProps = {
 
 export const MainLayout = ({ children }: MainLayoutProps) => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -38,6 +40,8 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
 
   const handleLogout = () => {
     console.log("Logout clicked");
+    logout();
+    navigate("/");
   };
 
   const handleSettings = () => {
@@ -61,6 +65,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
       label: "Logout",
       icon: <LogoutOutlined />,
       disabled: false,
+      onClick: handleLogout,
     },
   ];
 
