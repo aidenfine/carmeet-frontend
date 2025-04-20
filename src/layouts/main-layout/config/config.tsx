@@ -6,15 +6,16 @@ import {
   PlusCircleOutlined,
   ToolOutlined,
 } from "@ant-design/icons";
+import { CREATE_MEET_ROUTE, HOME_ROUTE } from "src/routes/config";
 
 export const HOST_NAV_ITEMS = [
   {
-    key: "home",
+    key: `/${HOME_ROUTE}`,
     icon: <HomeOutlined />,
     label: "Home",
   },
   {
-    key: "notifications",
+    key: "/notifications",
     icon: <BellOutlined />,
     label: "Notifications",
   },
@@ -24,17 +25,17 @@ export const HOST_NAV_ITEMS = [
     label: "Host",
     children: [
       {
-        key: "create-host",
+        key: `/${HOME_ROUTE}/${CREATE_MEET_ROUTE}`,
         label: "Create Meet",
         icon: <PlusCircleOutlined />,
       },
       {
-        key: "view-host",
+        key: `/${HOME_ROUTE}/view-host`,
         label: "View Meets",
         icon: <EyeOutlined />,
       },
       {
-        key: "settings-host",
+        key: `/${HOME_ROUTE}/settings-host`,
         label: "Host Settings",
         icon: <SettingOutlined />,
       },

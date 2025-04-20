@@ -31,6 +31,10 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
   const [drawerVisible, setDrawerVisible] = useState(false);
 
   const isMobile = window.innerWidth < 768;
+  const onMenuClick: MenuProps["onClick"] = (e) => {
+    navigate(e.key, { replace: true });
+    setDrawerVisible(false);
+  };
 
   const handleLogout = () => {
     logout();
@@ -96,7 +100,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
               <Menu
                 mode="inline"
                 items={HOST_NAV_ITEMS}
-                onClick={() => setDrawerVisible(false)}
+                onClick={onMenuClick}
               />
               <Divider />
               <Menu
@@ -112,6 +116,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
               mode="horizontal"
               items={HOST_NAV_ITEMS}
               style={{ flex: 1 }}
+              onClick={onMenuClick}
             />
             <Dropdown menu={{ items: userMenu }} placement="bottom">
               <Avatar
