@@ -1,8 +1,19 @@
-import { Button, Form, FormProps, Input, Select, Typography } from "antd";
+import {
+  Button,
+  Form,
+  FormProps,
+  Input,
+  Select,
+  Typography,
+  message,
+} from "antd";
+import { NoticeType } from "antd/es/message/interface";
 import FormItem from "antd/es/form/FormItem";
 import Password from "antd/es/input/Password";
 import { useState } from "react";
 import { INTRESTS_OPTIONS, US_STATES_OPTIONS } from "./config";
+import { AuthService } from "src/services/auth";
+import { useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;
 
@@ -12,17 +23,39 @@ type RegisterFieldType = {
   password: string;
   confirmPassword: string;
   applyingForHost?: string;
-  intrests?: string[];
-  state?: string[];
+  interests?: string[];
+  states?: string[];
 };
 
 export const Register = () => {
   const [form] = Form.useForm();
-  const [currentStep, setCurrentStep] = useState(2);
+  const navigate = useNavigate();
+  const [currentStep, setCurrentStep] = useState(1);
+  const [messageApi, contextHolder] = message.useMessage();
+  const showPopup = (type: NoticeType, message: string) => {
+    messageApi.open({
+      type: type,
+      content: message,
+    });
+  };
 
   const onFinish: FormProps<RegisterFieldType>["onFinish"] = (values) => {
-    console.log("Success:", values);
-    // send data to backend
+    console.log(values, "values");
+    try {
+      AuthService.register({
+        ...values,
+      }).then((res) => {
+        console.log(res);
+        if (res.status == 200) {
+          showPopup("success", "Account has been created");
+          navigate("/home", { replace: true });
+        } else {
+          showPopup("error", res?.data?.message);
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const onFinishFailed: FormProps<RegisterFieldType>["onFinishFailed"] = (
@@ -113,13 +146,13 @@ export const Register = () => {
       </FormItem>
       <FormItem
         label="What type of meets are you intrested in?"
-        name="intrests"
+        name="interests"
       >
         <Select mode="tags" options={INTRESTS_OPTIONS} />
       </FormItem>
       <FormItem
         label="What states would you like to see events from?"
-        name="state"
+        name="states"
       >
         <Select
           mode="multiple"
@@ -146,20 +179,27 @@ export const Register = () => {
   );
 
   return (
-    <Form
-      form={form}
-      onFinish={onFinish}
-      onFinishFailed={onFinishFailed}
-      layout="vertical"
-      style={{ width: "100%" }}
-      autoComplete="on"
-    >
-      {currentStep === 1 && <Step1 />}
-      {currentStep === 2 && <Step2 />}
+    <>
+      {contextHolder}
+      <Form
+        form={form}
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+        layout="vertical"
+        style={{ width: "100%" }}
+        autoComplete="on"
+      >
+        <div style={{ display: currentStep === 1 ? "block" : "none" }}>
+          <Step1 />
+        </div>
+        <div style={{ display: currentStep === 2 ? "block" : "none" }}>
+          <Step2 />
+        </div>
 
-      <Text style={{ display: "block", marginTop: 12 }}>
-        Already have an account? <a href="login">Sign in</a>
-      </Text>
-    </Form>
+        <Text style={{ display: "block", marginTop: 12 }}>
+          Already have an account? <a href="login">Sign in</a>
+        </Text>
+      </Form>
+    </>
   );
 };

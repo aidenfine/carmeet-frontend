@@ -5,7 +5,7 @@ import React, {
   useState,
   ReactNode,
 } from "react";
-import { AuthService } from "src/services";
+import { AuthService } from "src/services/auth/Auth.Service";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -40,6 +40,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const logout = async () => {
     setIsAuthenticated(false);
+    try {
+      AuthService.logout();
+    } catch (error) {
+      console.error(error);
+      console.log("ERROR LOGGING OUT AND CLEARING TOKENS");
+    }
   };
 
   useEffect(() => {

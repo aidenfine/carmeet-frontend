@@ -1,7 +1,7 @@
 import { Button, Form, FormProps, Input, Typography, message } from "antd";
 import FormItem from "antd/es/form/FormItem";
 import Password from "antd/es/input/Password";
-import { AuthService } from "src/services";
+import { AuthService } from "src/services/auth/Auth.Service";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "src/context/Auth";
