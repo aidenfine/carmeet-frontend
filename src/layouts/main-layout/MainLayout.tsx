@@ -7,6 +7,7 @@ import {
   MenuProps,
   Divider,
   Drawer,
+  Typography,
 } from "antd";
 import {
   MenuOutlined,
@@ -24,6 +25,7 @@ type MainLayoutProps = {
 };
 
 export const MainLayout = ({ children }: MainLayoutProps) => {
+  const { Title } = Typography;
   const navigate = useNavigate();
   const { logout } = useAuth();
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -68,23 +70,31 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
       >
         {isMobile ? (
           <>
+            <Title level={3}>CarScene</Title>
             <Button
               type="text"
               icon={<MenuOutlined />}
               onClick={() => setDrawerVisible(true)}
-              style={{ fontSize: 24, color: "black", display: "inline-flex" }}
+              style={{
+                fontSize: 18,
+                color: "black",
+                display: "inline-flex",
+                position: "absolute",
+                top: "20px",
+                right: "20px",
+              }}
             />
-
             <Drawer
-              title="Menu"
-              placement="left"
+              title="CarScene"
+              placement="top"
               onClose={() => setDrawerVisible(false)}
               open={drawerVisible}
               width="100%"
+              height="100%"
               style={{ padding: 0 }}
             >
               <Menu
-                mode="vertical"
+                mode="inline"
                 items={HOST_NAV_ITEMS}
                 onClick={() => setDrawerVisible(false)}
               />
@@ -103,7 +113,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
               items={HOST_NAV_ITEMS}
               style={{ flex: 1 }}
             />
-            <Dropdown menu={{ items: userMenu }} placement="bottomRight">
+            <Dropdown menu={{ items: userMenu }} placement="bottom">
               <Avatar
                 style={{ cursor: "pointer", backgroundColor: "#d3d3d3" }}
                 icon={<UserOutlined />}

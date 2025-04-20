@@ -34,21 +34,24 @@ const meets = [
 
 export const MainPage = () => {
   return (
-    <div style={{ padding: "16px", maxWidth: "100vw", overflowX: "hidden" }}>
-      <Row gutter={[16, 16]} justify="center">
+    <div
+      style={{
+        padding: "16px",
+        maxWidth: "100vw",
+        overflowX: "hidden",
+      }}
+    >
+      <Row gutter={[24, 24]} justify="start">
         {meets.map((meet, index) => (
           <Col
             key={index}
-            xs={24}
-            sm={24}
-            md={12}
-            lg={8}
-            xl={8}
-            style={{ display: "flex", justifyContent: "center" }}
+            xs={24} // Full width on mobile
+            sm={24} // Full width on small screens
+            md={12} // Half width on medium screens (tablet)
+            lg={8} // 1/3 width on large screens (desktop)
+            xl={6} // 1/4 width on extra-large screens (larger desktops)
           >
-            <div style={{ width: "100%", maxWidth: "360px" }}>
-              <MeetCard {...meet} />
-            </div>
+            <MeetCard {...meet} />
           </Col>
         ))}
       </Row>

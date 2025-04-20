@@ -31,6 +31,7 @@ export const MeetCard = ({
       return <Tag color="default">Private</Tag>;
     }
   };
+
   const renderImage = (isLoading: boolean) => {
     if (isLoading) {
       return null;
@@ -40,7 +41,7 @@ export const MeetCard = ({
           alt="cover"
           src={cover}
           style={{
-            height: 300,
+            height: 220,
             width: "100%",
             objectFit: "cover",
           }}
@@ -49,12 +50,17 @@ export const MeetCard = ({
     }
   };
 
-  console.log("card id");
-
   return (
     <Card
       variant="borderless"
-      style={{ width: "100%", maxWidth: 360 }}
+      style={{
+        width: "100%",
+        height: "100%",
+        boxShadow: "0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)",
+        transition: "all 0.3s cubic-bezier(.25,.8,.25,1)",
+        borderRadius: "8px",
+        overflow: "hidden",
+      }}
       loading={isLoading}
       cover={renderImage(isLoading ?? true)}
       actions={[
@@ -78,12 +84,16 @@ export const MeetCard = ({
             }}
           >
             <h3 style={{ margin: 0 }}>{title}</h3>
-            <p style={{ margin: 0, color: "gray" }}>{timeInfo}</p>
+            <p style={{ margin: 0, color: "gray", fontSize: "0.85rem" }}>
+              {timeInfo}
+            </p>
           </div>
           {renderTag(isPublic)}
         </div>
       </div>
-      <p style={{ color: "gray", marginTop: "5px" }}>{description}</p>
+      <p style={{ color: "gray", marginTop: "12px", lineHeight: "1.5" }}>
+        {description}
+      </p>
     </Card>
   );
 };
