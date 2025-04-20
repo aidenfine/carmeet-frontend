@@ -54,17 +54,17 @@ export const MeetCard = ({
   return (
     <Card
       variant="borderless"
-      style={{ width: 500 }}
+      style={{ width: "100%", maxWidth: 360 }}
       loading={isLoading}
       cover={renderImage(isLoading ?? true)}
       actions={[
-        <Popover content="Going">
-          <CheckOutlined color="#00ff00" key="im-going-btn" />
+        <Popover content="Going" key="going">
+          <CheckOutlined />
         </Popover>,
-        <Popover content="Not interested">
-          <CloseOutlined color="red" key="not-going-btn" />
+        <Popover content="Not interested" key="not-going">
+          <CloseOutlined />
         </Popover>,
-        <EllipsisOutlined key="more-options" />,
+        <EllipsisOutlined key="more" />,
       ]}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>

@@ -1,5 +1,4 @@
 import {
-  theme,
   Layout,
   Menu,
   Button,
@@ -7,48 +6,36 @@ import {
   Dropdown,
   MenuProps,
   Divider,
+  Drawer,
 } from "antd";
-import { Header, Content } from "antd/es/layout/layout";
-import Sider from "antd/es/layout/Sider";
-import { ReactNode, useState } from "react";
 import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
+  MenuOutlined,
   UserOutlined,
   SettingOutlined,
   LogoutOutlined,
-  WarningOutlined,
-  QuestionOutlined,
 } from "@ant-design/icons";
-
-import placeholder from "../../assets/placeholder.svg";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { HOST_NAV_ITEMS } from "./config/config";
 import { useAuth } from "src/context/Auth";
+import { HOST_NAV_ITEMS } from "./config/config";
 
 type MainLayoutProps = {
-  children: ReactNode;
+  children: React.ReactNode;
 };
 
 export const MainLayout = ({ children }: MainLayoutProps) => {
   const navigate = useNavigate();
   const { logout } = useAuth();
-  const [collapsed, setCollapsed] = useState(false);
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
+  const [drawerVisible, setDrawerVisible] = useState(false);
+
+  const isMobile = window.innerWidth < 768;
 
   const handleLogout = () => {
-    console.log("Logout clicked");
     logout();
     navigate("/");
   };
 
-  const handleSettings = () => {
-    console.log("Settings clicked");
-  };
-
-  const items: MenuProps["items"] = [
+  const userMenu: MenuProps["items"] = [
     {
       key: "profile",
       label: "Profile",
@@ -58,94 +45,86 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
       key: "settings",
       label: "Settings",
       icon: <SettingOutlined />,
-      disabled: false,
     },
     {
       key: "logout",
       label: "Logout",
       icon: <LogoutOutlined />,
-      disabled: false,
       onClick: handleLogout,
     },
   ];
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Sider trigger={null} collapsible collapsed={collapsed} theme="light">
-        <div style={{ marginTop: "12px" }} className="demo-logo-vertical">
-          <img width={"200"} src={placeholder} />
-        </div>
-        <Divider />
-        <Menu
-          theme="light"
-          mode="inline"
-          style={{
-            marginTop: "45px",
-          }}
-          defaultSelectedKeys={["home"]}
-          items={HOST_NAV_ITEMS}
-        />
-        <div
-          style={{
-            position: "absolute",
-            bottom: 0,
-            width: "100%",
-          }}
-        >
-          <Divider />
-          <Menu theme="light" mode="inline">
-            <Menu.Item key="help" icon={<WarningOutlined />}>
-              Report an issue
-            </Menu.Item>
-            <Menu.Item key="contact" icon={<QuestionOutlined />}>
-              Support
-            </Menu.Item>
-          </Menu>
-        </div>
-      </Sider>
-      <Layout>
-        <Header
-          style={{
-            padding: "0 16px",
-            background: colorBgContainer,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Button
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: "16px",
-              width: 64,
-              height: 64,
-            }}
-          />
-          <Dropdown menu={{ items }} placement="bottomRight" arrow>
-            <Avatar
-              style={{
-                cursor: "pointer",
-                backgroundColor: "#d3d3d3",
-              }}
-              icon={<UserOutlined />}
+      <Layout.Header
+        style={{
+          background: "#fff",
+          padding: "0 16px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          overflowX: "hidden",
+        }}
+      >
+        {isMobile ? (
+          <>
+            <Button
+              type="text"
+              icon={<MenuOutlined />}
+              onClick={() => setDrawerVisible(true)}
+              style={{ fontSize: 24, color: "black", display: "inline-flex" }}
             />
-          </Dropdown>
-        </Header>
-        <Content
-          style={{
-            margin: "24px 16px",
-            padding: 24,
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-            flex: 1,
-            overflow: "auto",
-          }}
-        >
-          {children}
-        </Content>
-      </Layout>
+
+            <Drawer
+              title="Menu"
+              placement="left"
+              onClose={() => setDrawerVisible(false)}
+              open={drawerVisible}
+              width="100%"
+              style={{ padding: 0 }}
+            >
+              <Menu
+                mode="vertical"
+                items={HOST_NAV_ITEMS}
+                onClick={() => setDrawerVisible(false)}
+              />
+              <Divider />
+              <Menu
+                mode="vertical"
+                items={userMenu}
+                onClick={() => setDrawerVisible(false)}
+              />
+            </Drawer>
+          </>
+        ) : (
+          <>
+            <Menu
+              mode="horizontal"
+              items={HOST_NAV_ITEMS}
+              style={{ flex: 1 }}
+            />
+            <Dropdown menu={{ items: userMenu }} placement="bottomRight">
+              <Avatar
+                style={{ cursor: "pointer", backgroundColor: "#d3d3d3" }}
+                icon={<UserOutlined />}
+              />
+            </Dropdown>
+          </>
+        )}
+      </Layout.Header>
+
+      <Layout.Content
+        style={{
+          margin: "24px 16px",
+          padding: 24,
+          background: "#fff",
+          borderRadius: "8px",
+          overflow: "auto",
+          flex: 1,
+        }}
+      >
+        {children}
+      </Layout.Content>
     </Layout>
   );
 };

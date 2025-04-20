@@ -34,12 +34,24 @@ const meets = [
 
 export const MainPage = () => {
   return (
-    <Row gutter={[16, 16]} justify="center">
-      {meets.map((meet, index) => (
-        <Col key={index} xs={24} sm={24} md={12} lg={8} xl={8}>
-          <MeetCard {...meet} />
-        </Col>
-      ))}
-    </Row>
+    <div style={{ padding: "16px", maxWidth: "100vw", overflowX: "hidden" }}>
+      <Row gutter={[16, 16]} justify="center">
+        {meets.map((meet, index) => (
+          <Col
+            key={index}
+            xs={24}
+            sm={24}
+            md={12}
+            lg={8}
+            xl={8}
+            style={{ display: "flex", justifyContent: "center" }}
+          >
+            <div style={{ width: "100%", maxWidth: "360px" }}>
+              <MeetCard {...meet} />
+            </div>
+          </Col>
+        ))}
+      </Row>
+    </div>
   );
 };

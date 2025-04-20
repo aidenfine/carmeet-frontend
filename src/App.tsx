@@ -7,7 +7,7 @@ function App() {
   const queryClient = new QueryClient();
 
   return (
-    <ConfigProvider>
+    <ConfigProvider theme={{ token: {} }}>
       <QueryClientProvider client={queryClient}>
         <Router />
       </QueryClientProvider>
