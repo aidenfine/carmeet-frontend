@@ -43,7 +43,12 @@ export const Register = () => {
     console.log(values, "values");
     try {
       AuthService.register({
-        ...values,
+        username: values.username,
+        email: values.email,
+        password_hash: values.password,
+        host_status: values.applyingForHost,
+        interests: values.interests,
+        states: values.states,
       }).then((res) => {
         console.log(res);
         if (res.status == 200) {

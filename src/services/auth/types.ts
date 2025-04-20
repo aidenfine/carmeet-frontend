@@ -6,9 +6,8 @@ export type LoginParamsTypes = {
 export type RegisterParamsTypes = {
   email: string;
   username: string;
-  password: string;
-  confirmPassword: string;
-  applyingForHost?: string;
+  password_hash: string;
+  host_status?: string;
   interests?: string[];
   states?: string[];
 };
